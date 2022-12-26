@@ -28,12 +28,12 @@ export function makeImmutable<T extends React.ComponentType<any>>(Component: T):
 export function responseImmutable<T extends React.ComponentType<any>>(Component: T): T {
   const refAble = supportRef(Component);
 
-  const ImmutableComponent = function (props: any, ref: any) {
+  const ImmutableComponent = React.memo(function (props: any, ref: any) {
     const refProps = refAble ? { ref } : {};
-    const renderTimes = React.useContext(RenderContext);
+    React.useContext(RenderContext);
 
-    return React.useMemo(() => <Component {...props} {...refProps} />, [renderTimes]);
-  };
+    return <Component {...props} {...refProps} />;
+  });
 
   if (process.env.NODE_ENV !== 'production') {
     ImmutableComponent.displayName = `ImmutableResponse(${
