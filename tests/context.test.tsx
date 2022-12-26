@@ -185,4 +185,17 @@ describe('Basic', () => {
     expect(container.querySelector('#times')!.textContent).toEqual('2');
     expect(container.querySelector('#value')!.textContent).toEqual('light');
   });
+
+  it('defaultValue', () => {
+    const DefaultContext = createContext('little');
+    const Demo = () => (
+      <>
+        <Value id="value" value={useContext(DefaultContext)} />
+      </>
+    );
+
+    const { container } = render(<Demo />);
+
+    expect(container.querySelector('#value')!.textContent).toEqual('little');
+  });
 });
