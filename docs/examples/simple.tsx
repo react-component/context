@@ -1,4 +1,4 @@
-import { createContext, useContextSelector } from '@rc-component/context';
+import { createContext, useContext } from '@rc-component/context';
 import React from 'react';
 import useRenderTimes from './useRenderTimes';
 
@@ -8,7 +8,7 @@ const CountContext = createContext<{
 }>();
 
 const MyConsumer = React.memo(({ name }: { name: any }) => {
-  const value = useContextSelector(CountContext, name);
+  const value = useContext(CountContext, name);
   const renderTimes = useRenderTimes();
 
   return (

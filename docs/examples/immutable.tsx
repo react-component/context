@@ -2,7 +2,7 @@ import {
   createContext,
   makeImmutable,
   responseImmutable,
-  useContextSelector,
+  useContext,
 } from '@rc-component/context';
 import React from 'react';
 import useRenderTimes from './useRenderTimes';
@@ -34,7 +34,7 @@ const ImmutableMyApp = makeImmutable(MyApp);
 
 const MyComponent = ({ name }: { name: any }) => {
   const renderTimes = useRenderTimes();
-  const value = useContextSelector(AppContext, name);
+  const value = useContext(AppContext, name);
 
   return (
     <div>

@@ -55,32 +55,41 @@ export function createContext<ContextProps>(
   return { Context, Provider };
 }
 
+/** e.g. useSelect(userContext) => user */
+export function useContext<ContextProps>(
+  holder: SelectorContext<ContextProps>,
+): ContextProps;
+
 /** e.g. useSelect(userContext, user => user.name) => user.name */
-export function useContextSelector<ContextProps, SelectorValue>(
+export function useContext<ContextProps, SelectorValue>(
   holder: SelectorContext<ContextProps>,
   selector: Selector<ContextProps, SelectorValue>,
 ): SelectorValue;
 
 /** e.g. useSelect(userContext, ['name', 'age']) => user { name, age } */
-export function useContextSelector<ContextProps, SelectorValue extends Partial<ContextProps>>(
+export function useContext<ContextProps, SelectorValue extends Partial<ContextProps>>(
   holder: SelectorContext<ContextProps>,
   selector: (keyof ContextProps)[],
 ): SelectorValue;
 
 /** e.g. useSelect(userContext, 'name') => user.name */
-export function useContextSelector<ContextProps, PropName extends keyof ContextProps>(
+export function useContext<ContextProps, PropName extends keyof ContextProps>(
   holder: SelectorContext<ContextProps>,
   selector: PropName,
 ): ContextProps[PropName];
 
-export function useContextSelector<ContextProps, SelectorValue>(
+export function useContext<ContextProps, SelectorValue>(
   holder: SelectorContext<ContextProps>,
-  selector: Selector<ContextProps, any> | (keyof ContextProps)[] | keyof ContextProps,
+  selector?: Selector<ContextProps, any> | (keyof ContextProps)[] | keyof ContextProps,
 ) {
   const eventSelector = useEvent<Selector<ContextProps, SelectorValue>>(
     typeof selector === 'function'
       ? selector
       : ctx => {
+          if (selector === undefined) {
+            return ctx;
+          }
+
           if (!Array.isArray(selector)) {
             return ctx[selector];
           }
