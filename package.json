@@ -1,20 +1,19 @@
 {
-  "name": "rc-align",
-  "version": "4.0.15",
-  "description": "align ui component for react",
+  "name": "@rc-component/context",
+  "version": "1.0.0-alpha.0",
+  "description": "React way perf context selector",
   "keywords": [
     "react",
     "react-component",
-    "react-align",
-    "align"
+    "context"
   ],
-  "homepage": "http://github.com/react-component/align",
+  "homepage": "http://github.com/react-component/context",
   "bugs": {
-    "url": "http://github.com/react-component/align/issues"
+    "url": "http://github.com/react-component/context/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:react-component/align.git"
+    "url": "git@github.com:react-component/context.git"
   },
   "license": "MIT",
   "author": "",
@@ -37,10 +36,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.10.1",
-    "classnames": "2.x",
-    "dom-align": "^1.7.0",
-    "rc-util": "^5.26.0",
-    "resize-observer-polyfill": "^1.5.1"
+    "rc-util": "^5.26.0"
   },
   "devDependencies": {
     "@rc-component/father-plugin": "^1.0.0",

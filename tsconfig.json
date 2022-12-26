@@ -14,7 +14,7 @@
       "@@/*": [
         "src/.umi/*"
       ],
-      "rc-align": [
+      "@rc-component/context": [
         "src/index.ts"
       ]
     }

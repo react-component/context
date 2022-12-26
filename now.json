@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "rc-align",
+  "name": "rc-context",
   "builds": [
     {
       "src": "package.json",
