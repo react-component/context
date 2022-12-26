@@ -110,4 +110,79 @@ describe('Basic', () => {
     expect(container.querySelector('#age-times')!.textContent).toEqual('2');
     expect(container.querySelector('#age-value')!.textContent).toEqual('20');
   });
+
+  it('PropNameArray', () => {
+    const PropName = ({ name }: { name: (keyof User)[] }) => {
+      const value = useContext(UserContext, name);
+
+      return (
+        <>
+          <Value id={`${name.join('_')}-value`} value={value} />
+          <RenderTimer id={`${name.join('_')}-times`} />
+        </>
+      );
+    };
+
+    const { container } = render(
+      <Root>
+        <PropName name={['name']} />
+        <PropName name={['name', 'age']} />
+      </Root>,
+    );
+
+    // Mount
+    expect(container.querySelector('#name-times')!.textContent).toEqual('1');
+    expect(container.querySelector('#name_age-times')!.textContent).toEqual('1');
+
+    // Update `name`: Partial Update
+    changeValue(container, 'name', 'light');
+    expect(container.querySelector('#name-times')!.textContent).toEqual('2');
+    expect(container.querySelector('#name-value')!.textContent).toEqual(
+      JSON.stringify({ name: 'light' }),
+    );
+    expect(container.querySelector('#name_age-times')!.textContent).toEqual('2');
+    expect(container.querySelector('#name_age-value')!.textContent).toEqual(
+      JSON.stringify({ name: 'light', age: 30 }),
+    );
+
+    // Update `age`: Partial Update
+    changeValue(container, 'age', '20');
+    expect(container.querySelector('#name-times')!.textContent).toEqual('2');
+    expect(container.querySelector('#name_age-times')!.textContent).toEqual('3');
+    expect(container.querySelector('#name_age-value')!.textContent).toEqual(
+      JSON.stringify({ name: 'light', age: 20 }),
+    );
+  });
+
+  it('function', () => {
+    const Func = () => {
+      const value = useContext(UserContext, v => v.name);
+
+      return (
+        <>
+          <Value id="value" value={value} />
+          <RenderTimer id="times" />
+        </>
+      );
+    };
+
+    const { container } = render(
+      <Root>
+        <Func />
+      </Root>,
+    );
+
+    // Mount
+    expect(container.querySelector('#times')!.textContent).toEqual('1');
+
+    // Update `name`: Update
+    changeValue(container, 'name', 'light');
+    expect(container.querySelector('#times')!.textContent).toEqual('2');
+    expect(container.querySelector('#value')!.textContent).toEqual('light');
+
+    // Update `age`: Not Update
+    changeValue(container, 'age', '20');
+    expect(container.querySelector('#times')!.textContent).toEqual('2');
+    expect(container.querySelector('#value')!.textContent).toEqual('light');
+  });
 });
