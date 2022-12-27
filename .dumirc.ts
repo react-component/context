@@ -2,7 +2,7 @@ import { defineConfig } from 'dumi';
 
 export default defineConfig({
   themeConfig: {
-    name: 'Align',
+    name: 'Context',
   },
   mfsu: false,
 });

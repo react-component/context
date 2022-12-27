@@ -1,176 +1,40 @@
-import Align, { type RefAlign } from 'rc-align';
-import React, { Component } from 'react';
+import { createContext, useContext } from '@rc-component/context';
+import React from 'react';
+import useRenderTimes from './useRenderTimes';
 
-const allPoints = ['tl', 'tc', 'tr', 'cl', 'cc', 'cr', 'bl', 'bc', 'br'];
+const CountContext = createContext<{
+  cnt1: number;
+  cnt2: number;
+}>();
 
-interface TestState {
-  monitor: boolean;
-  random: boolean;
-  disabled: boolean;
-  randomWidth: number;
-  align: any;
-  sourceWidth: number;
-}
+const MyConsumer = React.memo(({ name }: { name: any }) => {
+  const value = useContext(CountContext, name);
+  const renderTimes = useRenderTimes();
 
-class Test extends Component<{}, TestState> {
-  state = {
-    monitor: true,
-    random: false,
-    disabled: false,
-    randomWidth: 100,
-    align: {
-      points: ['cc', 'cc'],
-    },
-    sourceWidth: 50,
-  };
+  return (
+    <div>
+      <label>{JSON.stringify(name)}:</label>
+      {value} ({renderTimes} times)
+    </div>
+  );
+});
 
-  id: NodeJS.Timer;
-  $container: HTMLElement;
-  $align: RefAlign;
+export default () => {
+  const [cnt1, setCnt1] = React.useState(0);
+  const [cnt2, setCnt2] = React.useState(0);
+  const renderTimes = useRenderTimes();
 
-  componentDidMount() {
-    this.id = setInterval(() => {
-      const { random } = this.state;
-      if (random) {
-        this.setState({
-          randomWidth: 60 + 40 * Math.random(),
-        });
-      }
-    }, 1000);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.id);
-  }
-
-  getTarget = () => {
-    if (!this.$container) {
-      // parent ref not attached
-      this.$container = document.getElementById('container');
-    }
-    return this.$container;
-  };
-
-  containerRef = ele => {
-    this.$container = ele;
-  };
-
-  alignRef = node => {
-    this.$align = node;
-  };
-
-  toggleMonitor = () => {
-    this.setState(({ monitor }) => ({
-      monitor: !monitor,
-    }));
-  };
-
-  toggleRandom = () => {
-    this.setState(({ random }) => ({
-      random: !random,
-    }));
-  };
-
-  toggleDisabled = () => {
-    this.setState(({ disabled }) => ({
-      disabled: !disabled,
-    }));
-  };
-
-  randomAlign = () => {
-    const randomPoints = [];
-    randomPoints.push(allPoints[Math.floor(Math.random() * 100) % allPoints.length]);
-    randomPoints.push(allPoints[Math.floor(Math.random() * 100) % allPoints.length]);
-    this.setState({
-      align: {
-        points: randomPoints,
-      },
-    });
-  };
-
-  forceAlign = () => {
-    this.$align.forceAlign();
-  };
-
-  toggleSourceSize = () => {
-    this.setState({
-      // eslint-disable-next-line react/no-access-state-in-setstate
-      sourceWidth: this.state.sourceWidth + 10,
-    });
-  };
-
-  render() {
-    const { random, randomWidth } = this.state;
-
-    return (
-      <div
-        style={{
-          margin: 50,
-        }}
-      >
-        <p>
-          <button type="button" onClick={this.forceAlign}>
-            Force align
-          </button>
-          &nbsp;&nbsp;&nbsp;
-          <button type="button" onClick={this.toggleSourceSize}>
-            Resize Source
-          </button>
-          &nbsp;&nbsp;&nbsp;
-          <button type="button" onClick={this.randomAlign}>
-            Random Align
-          </button>
-          &nbsp;&nbsp;&nbsp;
-          <label>
-            <input type="checkbox" checked={this.state.monitor} onChange={this.toggleMonitor} />
-            &nbsp; Monitor window resize
-          </label>
-          <label>
-            <input type="checkbox" checked={this.state.random} onChange={this.toggleRandom} />
-            &nbsp; Random Size
-          </label>
-          <label>
-            <input type="checkbox" checked={this.state.disabled} onChange={this.toggleDisabled} />
-            &nbsp; Disabled
-          </label>
-        </p>
-        <div
-          ref={this.containerRef}
-          id="container"
-          style={{
-            width: '80%',
-            // maxWidth: 1000,
-            height: 500,
-            border: '1px solid red',
-            ...(random
-              ? {
-                  width: `${randomWidth}%`,
-                }
-              : null),
-          }}
-        >
-          <Align
-            ref={this.alignRef}
-            target={this.getTarget}
-            monitorWindowResize={this.state.monitor}
-            align={this.state.align}
-            disabled={this.state.disabled}
-          >
-            <div
-              style={{
-                position: 'absolute',
-                width: this.state.sourceWidth,
-                height: 50,
-                background: 'yellow',
-              }}
-            >
-              <input defaultValue="source" style={{ width: '100%' }} />
-            </div>
-          </Align>
-        </div>
-      </div>
-    );
-  }
-}
-
-export default Test;
+  return (
+    <CountContext.Provider value={{ cnt1, cnt2 }}>
+      <button type="button" onClick={() => setCnt1(v => v + 1)}>
+        cnt 1: {cnt1}
+      </button>
+      <button type="button" onClick={() => setCnt2(v => v + 1)}>
+        cnt 2: {cnt2}
+      </button>
+      {renderTimes} times
+      <MyConsumer name="cnt1" />
+      <MyConsumer name="cnt2" />
+    </CountContext.Provider>
+  );
+};

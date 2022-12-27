@@ -1,6 +1,6 @@
-// export this package's api
-import Align from './Align';
+import type { SelectorContext } from './context';
+import { createContext, useContext } from './context';
+import { makeImmutable, responseImmutable } from './Immutable';
 
-export type { RefAlign } from './Align';
-
-export default Align;
+export { createContext, useContext, makeImmutable, responseImmutable };
+export type { SelectorContext };
