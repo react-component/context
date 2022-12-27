@@ -74,4 +74,25 @@ describe('Immutable', () => {
       expect(container.querySelector('#value')!.textContent).toEqual('1');
     });
   });
+
+  it('ref-able', () => {
+    const Root = React.forwardRef<HTMLDivElement, { children?: React.ReactNode }>((_, ref) => (
+      <div className="root" ref={ref} />
+    ));
+    const ImmutableRoot = makeImmutable(Root);
+    const Raw = React.forwardRef<HTMLDivElement>((_, ref) => <div className="raw" ref={ref} />);
+    const ImmutableRaw = responseImmutable(Raw);
+
+    const rootRef = React.createRef<HTMLDivElement>();
+    const rawRef = React.createRef<HTMLDivElement>();
+
+    const { container } = render(
+      <ImmutableRoot ref={rootRef}>
+        <ImmutableRaw ref={rawRef} />
+      </ImmutableRoot>,
+    );
+
+    expect(rootRef.current).toBe(container.querySelector('.root'));
+    expect(rawRef.current).toBe(container.querySelector('.raw'));
+  });
 });
