@@ -107,7 +107,7 @@ describe('Immutable', () => {
       </>
     );
 
-    const ImmutableInput = responseImmutable(Input);
+    const ImmutableInput = responseImmutable(Input, (prev, next) => prev.value === next.value);
 
     const { container, rerender } = render(<ImmutableInput value="same" onChange={() => {}} />);
     expect(container.querySelector('#input').textContent).toEqual('1');
