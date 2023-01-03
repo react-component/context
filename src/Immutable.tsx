@@ -34,7 +34,13 @@ export function makeImmutable<T extends React.ComponentType<any>>(Component: T):
  * Wrapped Component with `React.memo`.
  * But will rerender when parent with `makeImmutable` rerender.
  */
-export function responseImmutable<T extends React.ComponentType<any>>(Component: T): T {
+export function responseImmutable<T extends React.ComponentType<any>>(
+  Component: T,
+  propsAreEqual?: (
+    prevProps: Readonly<React.ComponentProps<T>>,
+    nextProps: Readonly<React.ComponentProps<T>>,
+  ) => boolean,
+): T {
   const refAble = supportRef(Component);
 
   const ImmutableComponent = function (props: any, ref: any) {
@@ -51,6 +57,6 @@ export function responseImmutable<T extends React.ComponentType<any>>(Component:
   }
 
   return refAble
-    ? React.memo(React.forwardRef(ImmutableComponent))
-    : (React.memo(ImmutableComponent) as any);
+    ? React.memo(React.forwardRef(ImmutableComponent), propsAreEqual)
+    : (React.memo(ImmutableComponent, propsAreEqual) as any);
 }
