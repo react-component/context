@@ -95,4 +95,27 @@ describe('Immutable', () => {
     expect(rootRef.current).toBe(container.querySelector('.root'));
     expect(rawRef.current).toBe(container.querySelector('.raw'));
   });
+
+  it('customize propsAreEqual', () => {
+    const Input: React.FC<{
+      value: string;
+      onChange: React.ChangeEventHandler<HTMLInputElement>;
+    }> = props => (
+      <>
+        <input {...props} />
+        <RenderTimer id="input" />
+      </>
+    );
+
+    const ImmutableInput = responseImmutable(Input, (prev, next) => prev.value === next.value);
+
+    const { container, rerender } = render(<ImmutableInput value="same" onChange={() => {}} />);
+    expect(container.querySelector('#input').textContent).toEqual('1');
+
+    rerender(<ImmutableInput value="same" onChange={() => {}} />);
+    expect(container.querySelector('#input').textContent).toEqual('1');
+
+    rerender(<ImmutableInput value="not-same" onChange={() => {}} />);
+    expect(container.querySelector('#input').textContent).toEqual('2');
+  });
 });
