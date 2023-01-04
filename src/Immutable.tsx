@@ -1,7 +1,16 @@
 import { supportRef } from 'rc-util/lib/ref';
 import * as React from 'react';
 
-const RenderContext = React.createContext<number>(0);
+const ImmutableContext = React.createContext<number>(0);
+
+/**
+ * Get render update mark by `makeImmutable` root.
+ * Do not deps on the return value as render times
+ * but only use for `useMemo` or `useCallback` deps.
+ */
+export function useImmutableMark() {
+  return React.useContext(ImmutableContext);
+}
 
 /**
  * Wrapped Component will be marked as Immutable.
@@ -17,9 +26,9 @@ export function makeImmutable<T extends React.ComponentType<any>>(Component: T):
     renderTimesRef.current += 1;
 
     return (
-      <RenderContext.Provider value={renderTimesRef.current}>
+      <ImmutableContext.Provider value={renderTimesRef.current}>
         <Component {...props} {...refProps} />
-      </RenderContext.Provider>
+      </ImmutableContext.Provider>
     );
   };
 
@@ -45,7 +54,7 @@ export function responseImmutable<T extends React.ComponentType<any>>(
 
   const ImmutableComponent = function (props: any, ref: any) {
     const refProps = refAble ? { ref } : {};
-    React.useContext(RenderContext);
+    useImmutableMark();
 
     return <Component {...props} {...refProps} />;
   };
