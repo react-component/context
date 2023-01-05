@@ -22,7 +22,7 @@ export function Value({ id, value }: { id?: string; value: any }) {
 
   return (
     <div id={id} className="value">
-      {str.replace(/^"/, '').replace(/"$/, '')}
+      {(str || '').replace(/^"/, '').replace(/"$/, '')}
     </div>
   );
 }
