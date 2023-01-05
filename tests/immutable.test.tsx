@@ -73,6 +73,53 @@ describe('Immutable', () => {
       expect(container.querySelector('#raw')!.textContent).toEqual('3');
       expect(container.querySelector('#value')!.textContent).toEqual('1');
     });
+
+    it('customize re-render logic', () => {
+      const MyRoot = ({
+        children,
+      }: {
+        children?: React.ReactNode;
+        trigger?: string;
+        notTrigger?: string;
+      }) => {
+        return (
+          <>
+            <RenderTimer id="root" />
+            {children}
+          </>
+        );
+      };
+
+      const ImmutableMyRoot = makeImmutable(MyRoot, (prev, next) => {
+        return prev.trigger !== next.trigger;
+      });
+
+      const { container, rerender } = render(
+        <ImmutableMyRoot>
+          <ImmutableRaw />
+        </ImmutableMyRoot>,
+      );
+      expect(container.querySelector('#root').textContent).toEqual('1');
+      expect(container.querySelector('#raw').textContent).toEqual('1');
+
+      // Update `notTrigger`: No Update
+      rerender(
+        <ImmutableMyRoot notTrigger="bamboo">
+          <ImmutableRaw />
+        </ImmutableMyRoot>,
+      );
+      expect(container.querySelector('#root').textContent).toEqual('2');
+      expect(container.querySelector('#raw').textContent).toEqual('1');
+
+      // Update `trigger`: Full Update
+      rerender(
+        <ImmutableMyRoot trigger="little" notTrigger="bamboo">
+          <ImmutableRaw />
+        </ImmutableMyRoot>,
+      );
+      expect(container.querySelector('#root').textContent).toEqual('3');
+      expect(container.querySelector('#raw').textContent).toEqual('2');
+    });
   });
 
   it('ref-able', () => {
