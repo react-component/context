@@ -12,11 +12,12 @@
         "src/*"
       ],
       "@@/*": [
-        "src/.umi/*"
+        ".dumi/tmp/*"
       ],
       "@rc-component/context": [
         "src/index.ts"
       ]
     }
-  }
+  },
+  "include": [".dumi/**/*", ".dumirc.ts", "**/*.ts", "**/*.tsx"]
 }
