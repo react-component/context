@@ -1,6 +1,16 @@
 import type { SelectorContext } from './context';
 import { createContext, useContext } from './context';
-import { makeImmutable, responseImmutable, useImmutableMark } from './Immutable';
+import createImmutable from './Immutable';
 
-export { createContext, useContext, makeImmutable, responseImmutable, useImmutableMark };
+// For legacy usage, we export it directly
+const { makeImmutable, responseImmutable, useImmutableMark } = createImmutable();
+
+export {
+  createContext,
+  useContext,
+  createImmutable,
+  makeImmutable,
+  responseImmutable,
+  useImmutableMark,
+};
 export type { SelectorContext };
