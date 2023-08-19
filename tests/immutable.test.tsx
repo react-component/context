@@ -1,6 +1,12 @@
 import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
-import { createContext, makeImmutable, responseImmutable, useContext } from '../src';
+import {
+  createContext,
+  createImmutable,
+  makeImmutable,
+  responseImmutable,
+  useContext,
+} from '../src';
 import { RenderTimer, Value } from './common';
 
 describe('Immutable', () => {
@@ -164,5 +170,52 @@ describe('Immutable', () => {
 
     rerender(<ImmutableInput value="not-same" onChange={() => {}} />);
     expect(container.querySelector('#input').textContent).toEqual('2');
+  });
+
+  describe('createImmutable', () => {
+    const { responseImmutable: responseCreatedImmutable, makeImmutable: makeCreatedImmutable } =
+      createImmutable();
+
+    it('nest should follow root', () => {
+      // child
+      const Little = responseCreatedImmutable(() => <RenderTimer id="little" />);
+
+      // parent
+      const Bamboo = makeCreatedImmutable(() => (
+        <>
+          <RenderTimer id="bamboo" />
+          <Little />
+        </>
+      ));
+
+      // root
+      const Light = makeCreatedImmutable(() => {
+        const [times, setTimes] = React.useState(0);
+
+        return (
+          <>
+            <button onClick={() => setTimes(i => i + 1)}>{times}</button>
+            <RenderTimer id="light" />
+            <Bamboo />
+          </>
+        );
+      });
+
+      const { container, rerender } = render(<Light />);
+
+      for (let i = 0; i < 10; i += 1) {
+        rerender(<Light />);
+      }
+      expect(container.querySelector('#light')!.textContent).toEqual('11');
+      expect(container.querySelector('#bamboo')!.textContent).toEqual('11');
+      expect(container.querySelector('#little')!.textContent).toEqual('11');
+
+      for (let i = 0; i < 10; i += 1) {
+        fireEvent.click(container.querySelector('button')!);
+      }
+      expect(container.querySelector('#light')!.textContent).toEqual('21');
+      expect(container.querySelector('#bamboo')!.textContent).toEqual('21');
+      expect(container.querySelector('#little')!.textContent).toEqual('11');
+    });
   });
 });
