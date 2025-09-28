@@ -1,5 +1,5 @@
-import useLayoutEffect from '@rc-component/util/lib/hooks/useLayoutEffect';
 import useEvent from '@rc-component/util/lib/hooks/useEvent';
+import useLayoutEffect from '@rc-component/util/lib/hooks/useLayoutEffect';
 import isEqual from '@rc-component/util/lib/isEqual';
 import * as React from 'react';
 import { unstable_batchedUpdates } from 'react-dom';
