@@ -35,7 +35,7 @@ export default function createImmutable() {
   ): T {
     const refAble = supportRef(Component);
 
-    const ImmutableComponent = function (props: any, ref: any) {
+    const ImmutableComponent: React.ForwardRefRenderFunction<any, any> = (props, ref) => {
       const refProps = refAble ? { ref } : {};
       const renderTimesRef = React.useRef(0);
       const prevProps = React.useRef(props);
@@ -67,7 +67,9 @@ export default function createImmutable() {
       ImmutableComponent.displayName = `ImmutableRoot(${Component.displayName || Component.name})`;
     }
 
-    return refAble ? React.forwardRef(ImmutableComponent) as unknown as  T : (ImmutableComponent as T);
+    return refAble
+      ? (React.forwardRef(ImmutableComponent) as unknown as T)
+      : (ImmutableComponent as T);
   }
 
   /**
@@ -80,10 +82,9 @@ export default function createImmutable() {
   ): T {
     const refAble = supportRef(Component);
 
-    const ImmutableComponent = function (props: any, ref: any) {
+    const ImmutableComponent: React.ForwardRefRenderFunction<any, any> = (props, ref) => {
       const refProps = refAble ? { ref } : {};
       useImmutableMark();
-
       return <Component {...props} {...refProps} />;
     };
 
@@ -93,9 +94,10 @@ export default function createImmutable() {
       })`;
     }
 
-    return refAble
-      ? React.memo(React.forwardRef(ImmutableComponent), propsAreEqual) as unknown as T
-      : (React.memo(ImmutableComponent, propsAreEqual) as unknown as T);
+    return React.memo(
+      refAble ? React.forwardRef(ImmutableComponent) : ImmutableComponent,
+      propsAreEqual,
+    ) as unknown as T;
   }
 
   return {
