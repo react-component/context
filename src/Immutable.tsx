@@ -47,7 +47,7 @@ export default function createImmutable() {
       }
 
       if (
-        // Always trigger re-render if not provide `notTriggerRender`
+        // Always trigger re-render if `shouldTriggerRender` is not provided
         !shouldTriggerRender ||
         shouldTriggerRender(prevProps.current, props)
       ) {
