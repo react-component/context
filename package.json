@@ -35,7 +35,6 @@
     "tsc": "tsc --noEmit"
   },
   "dependencies": {
-    "@babel/runtime": "^7.10.1",
     "@rc-component/util": "^1.3.0"
   },
   "devDependencies": {
