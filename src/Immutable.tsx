@@ -6,8 +6,6 @@ export type CompareProps<T extends React.ComponentType<any>> = (
   nextProps: Readonly<React.ComponentProps<T>>,
 ) => boolean;
 
-type ImmutableProps<T extends React.ComponentType<any>> = Omit<React.ComponentProps<T>, 'ref'>;
-
 /**
  * Create Immutable pair for `makeImmutable` and `responseImmutable`.
  */
@@ -34,10 +32,10 @@ export default function createImmutable() {
   function makeImmutable<T extends React.ComponentType<any>>(
     Component: T,
     shouldTriggerRender?: CompareProps<T>,
-  ): React.ComponentType<React.ComponentProps<T>> {
+  ): T {
     const refAble = supportRef(Component);
 
-    const ImmutableComponent = (props: ImmutableProps<T>, ref: React.Ref<any>) => {
+    const ImmutableComponent: React.ForwardRefRenderFunction<any, any> = (props, ref) => {
       const refProps = refAble ? { ref } : {};
       const renderTimesRef = React.useRef(0);
       const prevProps = React.useRef(props);
@@ -45,13 +43,13 @@ export default function createImmutable() {
       // If parent has the context, we do not wrap it
       const mark = useImmutableMark();
       if (mark !== null) {
-        return <Component {...(props as any)} {...refProps} />;
+        return <Component {...props} {...refProps} />;
       }
 
       if (
         // Always trigger re-render if `shouldTriggerRender` is not provided
         !shouldTriggerRender ||
-        shouldTriggerRender(prevProps.current as any, props as any)
+        shouldTriggerRender(prevProps.current, props)
       ) {
         renderTimesRef.current += 1;
       }
@@ -60,7 +58,7 @@ export default function createImmutable() {
 
       return (
         <ImmutableContext.Provider value={renderTimesRef.current}>
-          <Component {...(props as any)} {...refProps} />
+          <Component {...props} {...refProps} />
         </ImmutableContext.Provider>
       );
     };
@@ -70,8 +68,8 @@ export default function createImmutable() {
     }
 
     return refAble
-      ? (React.forwardRef(ImmutableComponent) as React.ComponentType<React.ComponentProps<T>>)
-      : (ImmutableComponent as unknown as React.ComponentType<React.ComponentProps<T>>);
+      ? (React.forwardRef(ImmutableComponent) as unknown as T)
+      : (ImmutableComponent as T);
   }
 
   /**
@@ -81,13 +79,13 @@ export default function createImmutable() {
   function responseImmutable<T extends React.ComponentType<any>>(
     Component: T,
     propsAreEqual?: CompareProps<T>,
-  ): React.ComponentType<React.ComponentProps<T>> {
+  ): T {
     const refAble = supportRef(Component);
 
-    const ImmutableComponent = (props: ImmutableProps<T>, ref: React.Ref<any>) => {
+    const ImmutableComponent: React.ForwardRefRenderFunction<any, any> = (props, ref) => {
       const refProps = refAble ? { ref } : {};
       useImmutableMark();
-      return <Component {...(props as any)} {...refProps} />;
+      return <Component {...props} {...refProps} />;
     };
 
     if (process.env.NODE_ENV !== 'production') {
@@ -96,13 +94,10 @@ export default function createImmutable() {
       })`;
     }
 
-    return refAble
-      ? (React.memo(React.forwardRef(ImmutableComponent), propsAreEqual) as React.ComponentType<
-          React.ComponentProps<T>
-        >)
-      : (React.memo(ImmutableComponent, propsAreEqual) as unknown as React.ComponentType<
-          React.ComponentProps<T>
-        >);
+    return React.memo(
+      refAble ? React.forwardRef(ImmutableComponent) : ImmutableComponent,
+      propsAreEqual,
+    ) as unknown as T;
   }
 
   return {
