@@ -1,4 +1,4 @@
-import { supportRef } from '@rc-component/util/lib/ref';
+import { supportRef } from '@rc-component/util';
 import * as React from 'react';
 
 export type CompareProps<T extends React.ComponentType<any>> = (
