@@ -13,7 +13,7 @@
   </p>
 </div>
 
-<p align="center">English | [简体中文](./README.zh-CN.md)</p>
+<p align="center">English | <a href="./README.zh-CN.md">简体中文</a></p>
 
 ## Highlights
 
@@ -48,7 +48,7 @@ export { Provider, useContext };
 ## Development
 
 ```bash
-npm install
+ut install
 npm start
 npm test
 npm run lint
