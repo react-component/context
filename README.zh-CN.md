@@ -1,7 +1,7 @@
 <div align="center">
   <h1>@rc-component/context</h1>
-  <p><sub><a href="https://ant.design"><img alt="Ant Design" height="14" src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" style="vertical-align: -0.125em;" /></a> Part of the Ant Design ecosystem.</sub></p>
-  <p>🔁 Performant React context selector utilities for rc-component packages.</p>
+  <p><sub><a href="https://ant.design"><img alt="Ant Design" height="14" src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" style="vertical-align: -0.125em;" /></a> Ant Design 生态的一部分。</sub></p>
+  <p>🔁 面向 rc-component 包的高性能 React Context 选择器工具。</p>
 
   <p>
     <a href="https://npmjs.org/package/@rc-component/context"><img alt="NPM version" src="https://img.shields.io/npm/v/@rc-component/context.svg?style=flat-square"></a>
@@ -13,23 +13,23 @@
   </p>
 </div>
 
-<p align="center">English | [简体中文](./README.zh-CN.md)</p>
+<p align="center">简体中文 | [English](./README.md)</p>
 
-## Highlights
+## 亮点
 
-| Area    | Support                                                                |
-| ------- | ---------------------------------------------------------------------- |
-| Purpose | Performant React context selector utilities for rc-component packages. |
-| Package | `@rc-component/context`                                                |
-| Release | `@rc-component/np` / `rc-np`                                           |
+| 方向 | 支持                                                    |
+| ---- | ------------------------------------------------------- |
+| 定位 | 面向 rc-component 包的高性能 React Context 选择器工具。 |
+| 包名 | `@rc-component/context`                                 |
+| 发布 | `@rc-component/np` / `rc-np`                            |
 
-## Install
+## 安装
 
 ```bash
 npm install @rc-component/context
 ```
 
-## Usage
+## 用法
 
 ```tsx | pure
 import createContext from '@rc-component/context';
@@ -41,11 +41,11 @@ export { Provider, useContext };
 
 ## API
 
-| API                           | Description                                        |
-| ----------------------------- | -------------------------------------------------- |
-| `createContext(defaultValue)` | Create a provider and selector-aware context hook. |
+| 名称                          | 说明                                        |
+| ----------------------------- | ------------------------------------------- |
+| `createContext(defaultValue)` | 创建 Provider 与支持选择器的 context hook。 |
 
-## Development
+## 本地开发
 
 ```bash
 npm install
@@ -56,16 +56,16 @@ npm run tsc
 npm run compile
 ```
 
-The dumi site runs at `http://localhost:8000`.
+本地 dumi 站点默认运行在 `http://localhost:8000`.
 
-## Release
+## 发布
 
 ```bash
 npm run prepublishOnly
 ```
 
-The release flow is handled by `@rc-component/np` through the `rc-np` command when the package uses the shared release flow.
+发布流程通过 `@rc-component/np` 提供的 `rc-np` 命令处理。
 
-## License
+## 许可证
 
-@rc-component/context is released under the [MIT](./LICENSE.md) license.
+@rc-component/context 基于 [MIT](./LICENSE.md) 协议发布。
