@@ -94,10 +94,11 @@ export default function createImmutable() {
       })`;
     }
 
-    return React.memo(
-      refAble ? React.forwardRef(ImmutableComponent) : ImmutableComponent,
-      propsAreEqual,
-    ) as unknown as T;
+    const MemoComponent = refAble
+      ? React.forwardRef(ImmutableComponent)
+      : (ImmutableComponent as React.ComponentType<any>);
+
+    return React.memo(MemoComponent, propsAreEqual) as unknown as T;
   }
 
   return {
