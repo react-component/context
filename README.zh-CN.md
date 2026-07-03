@@ -32,7 +32,7 @@ npm install @rc-component/context
 ## 用法
 
 ```tsx | pure
-import createContext from '@rc-component/context';
+import { createContext } from '@rc-component/context';
 
 const [Provider, useContext] = createContext({ count: 0 });
 
