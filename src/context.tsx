@@ -101,7 +101,7 @@ export function useContext<ContextProps, SelectorValue>(
   const context = React.useContext(holder?.Context);
   const { listeners, getValue } = context || {};
 
-  const valueRef = React.useRef<SelectorValue>();
+  const valueRef = React.useRef<SelectorValue | undefined>(undefined);
   valueRef.current = eventSelector(context ? getValue() : holder?.defaultValue);
   const [, forceUpdate] = React.useState({});
 

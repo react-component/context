@@ -1,17 +1,18 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "moduleResolution": "node",
-    "baseUrl": "./",
+    "strict": false,
+    "types": ["node", "jest"],
+    "moduleResolution": "bundler",
     "jsx": "react",
     "declaration": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "paths": {
-      "@/*": ["src/*"],
-      "@@/*": [".dumi/tmp/*"],
-      "@rc-component/context": ["src/index.ts"]
+      "@/*": ["./src/*"],
+      "@@/*": ["./.dumi/tmp/*"],
+      "@rc-component/context": ["./src/index.ts"]
     }
   },
-  "include": [".dumi/**/*", ".dumirc.ts", "**/*.ts", "**/*.tsx"]
+  "include": [".dumirc.ts", "**/*.ts", "**/*.tsx"]
 }
